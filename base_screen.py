@@ -32,20 +32,19 @@ class BaseScreen(MDScreen):
             self.running = False
             self.thread.kill()
     
-       
     def resume(self):
         self.ids.pause_resume_button.text = "Pause"
         self.ids.pause_resume_button.icon = "pause"
         self.ids.pause_resume_button.md_bg_color = "#FF204E"
         self.running = True
-        self.start()
+        self.start(resume=True)
 
 
 
     def stop(self):
         self.running = False
         self.thread.kill()
-        self.ids.container.clear_widgets()
+        self.ids.log_label.text = ""
         self.hide_button(0)
         self.reset_breakpoint()
 

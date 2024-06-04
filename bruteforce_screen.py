@@ -56,7 +56,7 @@ Builder.load_string('''
             id: text_field_charset
             hint_text: "Charset"
             max_text_length: 250
-            text: "abcdefghijklmnopqrstuvwxyz"
+            text: "0123456789"
             pos_hint: {"center_x": 0.7, "center_y": 0.85}
             
 
@@ -103,14 +103,16 @@ Builder.load_string('''
             pos_hint: {"center_x": 0.5, "center_y": 0.45}
             on_release: root.start()             
 
-        
-        MDList:
-            pos_hint: {"center_x": 0.5, "center_y": 0.4}
-            size_hint_x: .8
+        MDRectangleFlatButton:
+            pos_hint: {"center_x": 0.5, "center_y": 0.3}
+            size_hint_x: .5
             size_hint_y: 0
-            id: container
+            id: log_label
+            theme_text_color: "Custom"
             padding: "10dp"
             spacing: "10dp"
+            line_color: "#E1F7F5"
+            
 ''')
 
 
@@ -131,14 +133,15 @@ class BruteForceScreen(BaseScreen):
         if file_name:
             self.file_name = file_name
             self.ids.file_button.text = os.path.basename(file_name)
-            self.ids.container.clear_widgets()
+            self.ids.log_label.text = ""
             self.log = ""
             self.found_password = False
             self.hide_button(0)
         top.destroy()
 
-    def start(self):
-        self.reset_breakpoint()
+    def start(self, resume=False):
+        if resume == False:
+            self.reset_breakpoint()
         num_worker = self.ids.text_field_worker.text
         charset = self.ids.text_field_charset.text
         min_char = self.ids.text_field_minimum_char.text
@@ -153,17 +156,19 @@ class BruteForceScreen(BaseScreen):
         self.thread.daemon = True
         self.thread.start()
 
+
     def update_list(self, dt):
-        if len(self.ids.container.children) >= 2:
-            self.ids.container.clear_widgets()
         if 'password found' in self.log:
             self.hide_button(0)
-            self.ids.container.clear_widgets()
             self.reset_breakpoint()
-            self.ids.container.add_widget(OneLineListItem(text=self.log, theme_text_color="Custom", text_color="white", bg_color="#74E291"))
+            self.ids.log_label.text = self.log
+            self.ids.log_label.text_color = "white"
+            self.ids.log_label.bg_color = "#EE4E4E"
             toast(self.log)
         else:
-            self.ids.container.add_widget(OneLineListItem(text=self.log, theme_text_color="Custom", text_color="white", bg_color="#EE4E4E"))
+            self.ids.log_label.text = self.log
+            self.ids.log_label.text_color = "white"
+            self.ids.log_label.md_bg_color = "#EE4E4E"
 
     def callback(self, log):
         if self.found_password:
@@ -177,7 +182,7 @@ class BruteForceScreen(BaseScreen):
     def run_cracker(self, num_worker, charset, min_char, max_char):
         self.running = True
         Clock.schedule_once(self.show_button, 0)
-        cracker = RarCracker(self.file_name, start=int(min_char), workers=int(num_worker), stop=int(max_char), charset=charset, break_point=LocalBreakPoint("breakpoint/bruteforce_breakpoint.txt"))
+        cracker = RarCracker(self.file_name, start=int(min_char), workers=int(num_worker), stop=int(max_char), charset=charset, break_point=LocalBreakPoint("breakpoint/bruteforce_breakpoint.txt", breakpoint_count=1))
         cracker.crack(self.callback)
 
     def on_close(self):

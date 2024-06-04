@@ -12,12 +12,14 @@ class LocalBreakPoint(BreakPoint):
         if os.path.exists(breakpoint_path):
             with open(breakpoint_path) as file:
                 t = file.read().replace('\n', '')
+                print("Start in file: ", t)
                 if t == '':
                     self.start = 0
                 else:
                     self.start = int(t)
         else:
             self.start = 0
+        print("Start: ", self.start)
         self.count = 0
 
     def generate(self, provider: Provider, file) -> iter:

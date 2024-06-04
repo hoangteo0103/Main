@@ -116,7 +116,7 @@ class LocalDictionaryScreen(BaseScreen):
         if file_name:
             self.file_name = file_name
             self.ids.rar_file_button.text = os.path.basename(file_name)
-            self.ids.container.clear_widgets()
+            self.ids.log_label.text = ""
             self.log = ""
             self.found_password = False
         top.destroy()
@@ -128,13 +128,14 @@ class LocalDictionaryScreen(BaseScreen):
         if dictionary_file_name:
             self.dictionary_file_name = dictionary_file_name
             self.ids.dictionary_file_button.text = os.path.basename(dictionary_file_name)
-            self.ids.container.clear_widgets()
+            self.ids.log_label.text = ""
             self.log = ""
             self.found_password = False
         top.destroy()
     
-    def start(self):
-        self.reset_breakpoint()
+    def start(self, resume=False):
+        if resume == False:
+            self.reset_breakpoint()
         num_worker = self.ids.text_field_worker.text
         self.ids.container.size_hint_y = .3
 
@@ -151,15 +152,17 @@ class LocalDictionaryScreen(BaseScreen):
         self.thread.start()
 
     def update_list(self, dt):
-        if len(self.ids.container.children) >= 3:
-            self.ids.container.clear_widgets()
         if 'password found' in self.log:
             self.hide_button(0)
-            self.ids.container.clear_widgets()
-            self.ids.container.add_widget(OneLineListItem(text=self.log, theme_text_color="Custom", text_color="white", bg_color="#74E291"))
+            self.reset_breakpoint()
+            self.ids.log_label.text = self.log
+            self.ids.log_label.text_color = "white"
+            self.ids.log_label.bg_color = "#EE4E4E"
             toast(self.log)
         else:
-            self.ids.container.add_widget(OneLineListItem(text=self.log, theme_text_color="Custom", text_color="white", bg_color="#EE4E4E"))
+            self.ids.log_label.text = self.log
+            self.ids.log_label.text_color = "white"
+            self.ids.log_label.md_bg_color = "#EE4E4E"
 
 
     def callback(self, log):
@@ -168,8 +171,6 @@ class LocalDictionaryScreen(BaseScreen):
         
         self.log = log
         if 'password found' in log:
-            with open("breakpoint/dictionary_breakpoint.txt", "w") as f:
-                f.write("0")
             self.found_password = True
         Clock.schedule_once(self.update_list, 0)
     

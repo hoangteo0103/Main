@@ -1,7 +1,7 @@
 from kivy.clock import Clock
 from kivy.lang import Builder
 
-from kivymd.tools.hotreload.app import MDApp
+from kivymd.app import MDApp
 from kivymd.uix.behaviors import CommonElevationBehavior
 from kivymd.uix.button import MDFillRoundFlatIconButton
 from bruteforce_screen import BruteForceScreen
@@ -111,7 +111,7 @@ class MainApp(MDApp):
         return Builder.load_string(KV)
 
     def switch_screen(
-        self, instance_navigation_rail, instance_navigation_rail_item
+        self, instance_navigation_rail, instance_navigation_rail_item 
     ):
         '''
         Called when tapping on rail menu items. Switches application screens.

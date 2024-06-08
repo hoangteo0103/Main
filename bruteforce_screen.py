@@ -163,7 +163,7 @@ class BruteForceScreen(BaseScreen):
             self.reset_breakpoint()
             self.ids.log_label.text = self.log
             self.ids.log_label.text_color = "white"
-            self.ids.log_label.bg_color = "#EE4E4E"
+            self.ids.log_label.bg_color = "#41B06E"
             toast(self.log)
         else:
             self.ids.log_label.text = self.log

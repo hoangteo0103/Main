@@ -7,6 +7,11 @@ from kivymd.uix.button import MDFillRoundFlatIconButton
 from bruteforce_screen import BruteForceScreen
 from local_dictionary_screen import LocalDictionaryScreen
 from home_screen import HomeScreen
+from kivymd.uix import *
+from kivymd.icon_definitions import md_icons
+from kivymd.uix.navigationdrawer.navigationdrawer import MDNavigationLayout
+from  kivymd.uix.navigationrail.navigationrail import MDNavigationRail
+from kivymd.uix.dropdownitem import MDDropDownItem
 KV = '''
 #:import FadeTransition kivy.uix.screenmanager.FadeTransition
 
@@ -16,14 +21,14 @@ KV = '''
     shadow_radius: 12
     shadow_softness: 4
     -height: "56dp"
-
+<LayOut>
 
 <DrawerClickableItem@MDNavigationDrawerItem>
     focus_color: "#e7e4c0"
     unfocus_color: "#fffcf4"
 MDScreen:
 
-    MDNavigationLayout:
+    LayOut:
 
         ScreenManager:
 
@@ -62,11 +67,6 @@ MDScreen:
                             MDNavigationRailItem:
                                 text: "Dictionary"
                                 icon: "book"
-
-                            MDNavigationRailItem:
-                                text: "Settings"
-                                icon: "cog"
-
                         ScreenManager:
                             id: screen_manager
                             transition:
@@ -75,7 +75,8 @@ MDScreen:
     
 '''
 
-
+class LayOut(MDNavigationLayout):
+    pass
 class ExtendedButton(MDFillRoundFlatIconButton, CommonElevationBehavior):
     '''
     Implements a button of type

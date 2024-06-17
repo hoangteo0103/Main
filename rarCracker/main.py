@@ -11,8 +11,7 @@ from rarCracker.breakpoint import BreakPoint
 from rarCracker.default_breakpoint import DefaultBreakPoint
 from rarCracker.default_provider import DefaultProvider
 from rarCracker.provider import Provider
-
-from kivymd.icon_definitions import md_icons
+from numba import jit
 class RarCracker:
 
     def __init__(self, file_path: str, start: int = 1, stop: int = 10, charset=None, output: str = './output',
@@ -63,7 +62,6 @@ class RarCracker:
         else:
             logging.info('password empty')
             return ''
-
     class CrackThread(threading.Thread):
         def __init__(self, file, output, lock, password, sema, pipe, queue: Queue, callback):
             super().__init__()
@@ -98,7 +96,7 @@ class RarCracker:
                     self.queue.task_done()
                     return
                 except Exception as e:
-                    self.callback('password {} is not correct'.format(self.password))
+                    # self.callback('password {} is not correct'.format(self.password))
                     # logging.info('password {} is not correct'.format(self.password))
                     self.sema.release()
                     gc.collect()

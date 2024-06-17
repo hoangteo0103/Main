@@ -133,7 +133,9 @@ class BruteForceScreen(BaseScreen):
         if file_name:
             self.file_name = file_name
             self.ids.file_button.text = os.path.basename(file_name)
-            self.ids.log_label.text = ""
+            self.ids.log_label.text = "Please wait"
+            self.ids.log_label.pos_hint = {"center_x": 1.5, "center_y": 1.5}
+            self.ids.log_label.md_bg_color = "#E1F7F5"
             self.log = ""
             self.found_password = False
             self.hide_button(0)
@@ -151,19 +153,19 @@ class BruteForceScreen(BaseScreen):
         if not self.file_name:
             toast("Please select a file")
             return
-
         self.thread = thread_with_trace(target=self.run_cracker, args=(num_worker, charset, min_char, max_char))
         self.thread.daemon = True
         self.thread.start()
 
 
+
     def update_list(self, dt):
         if 'password found' in self.log:
             self.hide_button(0)
-            self.reset_breakpoint()
+            # self.reset_breakpoint()
             self.ids.log_label.text = self.log
             self.ids.log_label.text_color = "white"
-            self.ids.log_label.bg_color = "#41B06E"
+            self.ids.log_label.md_bg_color = "#41B06E"
             toast(self.log)
         else:
             self.ids.log_label.text = self.log
@@ -181,8 +183,9 @@ class BruteForceScreen(BaseScreen):
 
     def run_cracker(self, num_worker, charset, min_char, max_char):
         self.running = True
+        self.ids.log_label.pos_hint = {"center_x": 0.5, "center_y": 0.3}
         Clock.schedule_once(self.show_button, 0)
-        cracker = RarCracker(self.file_name, start=int(min_char), workers=int(num_worker), stop=int(max_char), charset=charset, break_point=LocalBreakPoint("breakpoint/bruteforce_breakpoint.txt", breakpoint_count=1))
+        cracker = RarCracker(self.file_name, start=int(min_char), workers=int(num_worker), stop=int(max_char), charset=charset, break_point=LocalBreakPoint("breakpoint/bruteforce_breakpoint.txt", breakpoint_count=10))
         cracker.crack(self.callback)
 
     def on_close(self):

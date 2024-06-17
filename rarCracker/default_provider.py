@@ -1,5 +1,6 @@
 import itertools
 from string import digits, ascii_letters, punctuation
+from numba import jit
 
 from rarCracker.provider import Provider
 

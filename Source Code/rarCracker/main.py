@@ -11,7 +11,6 @@ from rarCracker.breakpoint import BreakPoint
 from rarCracker.default_breakpoint import DefaultBreakPoint
 from rarCracker.default_provider import DefaultProvider
 from rarCracker.provider import Provider
-from numba import jit
 class RarCracker:
 
     def __init__(self, file_path: str, start: int = 1, stop: int = 10, charset=None, output: str = './output',

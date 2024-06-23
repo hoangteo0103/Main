@@ -188,7 +188,7 @@ class LocalDictionaryScreen(BaseScreen):
         self.running = True
         Clock.schedule_once(self.show_button, 0)
         self.ids.log_label_1.pos_hint = {"center_x": 0.5, "center_y": 0.3}
-        cracker = RarCracker(self.file_name, workers=int(num_worker), provider=LocalProvider(self.dictionary_file_name), break_point=LocalBreakPoint(breakpoint_path="breakpoint/dictionary_breakpoint.txt", breakpoint_count=1))
+        cracker = RarCracker(self.file_name, workers=int(num_worker), provider=LocalProvider(self.dictionary_file_name), break_point=LocalBreakPoint(breakpoint_path="dictionary_breakpoint.txt", breakpoint_count=1))
         cracker.crack(self.callback)
  
     def on_close(self):
@@ -197,7 +197,7 @@ class LocalDictionaryScreen(BaseScreen):
             self.thread.join()
     
     def reset_breakpoint(self):
-        with open("breakpoint/dictionary_breakpoint.txt", "w") as f:
+        with open("dictionary_breakpoint.txt", "w") as f:
             f.write("0")
             
 

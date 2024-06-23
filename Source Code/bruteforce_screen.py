@@ -192,7 +192,7 @@ class BruteForceScreen(BaseScreen):
         self.running = True
         self.ids.log_label.pos_hint = {"center_x": 0.5, "center_y": 0.3}
         Clock.schedule_once(self.show_button, 0)
-        cracker = RarCracker(self.file_name, start=int(min_char), workers=int(num_worker), stop=int(max_char), charset=charset, break_point=LocalBreakPoint("breakpoint/bruteforce_breakpoint.txt", breakpoint_count=10))
+        cracker = RarCracker(self.file_name, start=int(min_char), workers=int(num_worker), stop=int(max_char), charset=charset, break_point=LocalBreakPoint("bruteforce_breakpoint.txt", breakpoint_count=10))
         cracker.crack(self.callback)
 
     def on_close(self):
@@ -200,7 +200,7 @@ class BruteForceScreen(BaseScreen):
             self.thread.join()
     
     def reset_breakpoint(self):
-        with open("breakpoint/bruteforce_breakpoint.txt", "w") as f:
+        with open("bruteforce_breakpoint.txt", "w") as f:
             f.write("0")
 
 class BruteForceApp(MDApp):
